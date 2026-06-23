@@ -59,24 +59,24 @@ export default function Landing() {
             <div className="flex flex-wrap gap-md pt-2 pb-6 border-b border-outline-variant/30">
               <button 
                 type="button"
-                className="bg-error/10 text-error border border-error/30 font-display text-title-md px-6 py-3 rounded-lg hover:bg-error hover:text-white transition-all shadow-sm"
-                onClick={() => console.log('Dummy Checkout clicked')}
+                className="bg-primary text-on-primary font-display text-title-md px-6 py-3 rounded-lg hover:bg-primary/90 transition-all shadow-md"
+                onClick={() => console.log('Get Started clicked')}
               >
-                Fake Checkout
+                Get Started Free
               </button>
               <button 
                 type="button"
-                className="bg-tertiary/10 text-tertiary border border-tertiary/30 font-display text-title-md px-6 py-3 rounded-lg hover:bg-tertiary hover:text-white transition-all shadow-sm"
-                onClick={() => console.log('Dummy Subscribe clicked')}
+                className="bg-surface text-primary border border-outline-variant font-display text-title-md px-6 py-3 rounded-lg hover:bg-surface-variant transition-all shadow-sm"
+                onClick={() => console.log('Book Demo clicked')}
               >
-                Dummy Subscribe
+                Book a Demo
               </button>
               <button 
                 type="button"
                 className="bg-secondary/10 text-secondary border border-secondary/30 font-display text-title-md px-6 py-3 rounded-lg hover:bg-secondary hover:text-white transition-all shadow-sm"
-                onClick={() => console.log('Random Button clicked')}
+                onClick={() => console.log('Docs clicked')}
               >
-                Another Fake Button
+                Read the Docs
               </button>
             </div>
             
@@ -221,6 +221,77 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Mock Interactive SaaS Elements for Tracking */}
+      <section className="py-2xl bg-surface-container-lowest px-margin-mobile md:px-margin-desktop max-w-[1440px] mx-auto border-y border-outline-variant/30 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-secondary/5 via-transparent to-transparent"></div>
+        <div className="text-center mb-xl relative z-10">
+          <div className="inline-block bg-secondary/10 text-secondary px-4 py-1.5 rounded-full font-display text-label-md mb-2 border border-secondary/20">
+            Interactive Test Area
+          </div>
+          <h2 className="font-display text-headline-lg text-on-background mb-sm">Test The Tracking Capabilities</h2>
+          <p className="font-display text-body-lg text-on-surface-variant max-w-[42rem] mx-auto">
+            Interact with the pricing plans and contact form below. The tracker will capture these clicks and your exact scroll depth!
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-xl relative z-10">
+          {/* Pricing Mock */}
+          <div className="glass-card p-xl rounded-2xl border border-outline-variant flex flex-col items-center hover:border-primary/50 transition-colors">
+            <div className="w-full text-center pb-6 border-b border-outline-variant/50 mb-6">
+              <h3 className="font-display text-title-lg text-on-background mb-2">Enterprise Plan</h3>
+              <p className="text-display text-primary font-bold">$499<span className="text-title-md text-on-surface-variant font-normal">/mo</span></p>
+            </div>
+            <ul className="space-y-4 mb-8 w-full px-4">
+              <li className="flex items-center gap-3 text-on-surface"><span className="material-symbols-outlined text-primary text-sm">check_circle</span> Unlimited Analytics Sessions</li>
+              <li className="flex items-center gap-3 text-on-surface"><span className="material-symbols-outlined text-primary text-sm">check_circle</span> 1 Year Data Retention</li>
+              <li className="flex items-center gap-3 text-on-surface"><span className="material-symbols-outlined text-primary text-sm">check_circle</span> Custom Canvas Heatmaps</li>
+              <li className="flex items-center gap-3 text-on-surface"><span className="material-symbols-outlined text-primary text-sm">check_circle</span> Dedicated Account Manager</li>
+            </ul>
+            <button 
+              onClick={() => console.log("Pricing Clicked")}
+              className="w-full mt-auto bg-primary text-on-primary py-4 rounded-xl font-bold text-title-md hover:bg-primary/90 transition-colors shadow-md flex items-center justify-center gap-2"
+            >
+              Start Free Trial <span className="material-symbols-outlined text-sm">arrow_forward</span>
+            </button>
+          </div>
+
+          {/* Contact Form Mock */}
+          <div className="glass-card p-xl rounded-2xl border border-outline-variant hover:border-secondary/50 transition-colors">
+             <h3 className="font-display text-title-lg text-on-background mb-6">Request a Personalized Demo</h3>
+             <form onSubmit={(e) => { e.preventDefault(); console.log("Demo Requested"); }} className="space-y-5">
+               <div className="grid grid-cols-2 gap-4">
+                 <div>
+                   <label className="block text-label-md text-on-surface-variant mb-1">First Name</label>
+                   <input type="text" placeholder="John" className="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" />
+                 </div>
+                 <div>
+                   <label className="block text-label-md text-on-surface-variant mb-1">Last Name</label>
+                   <input type="text" placeholder="Doe" className="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" />
+                 </div>
+               </div>
+               <div>
+                 <label className="block text-label-md text-on-surface-variant mb-1">Work Email</label>
+                 <input type="email" placeholder="john@company.com" className="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" />
+               </div>
+               <div>
+                 <label className="block text-label-md text-on-surface-variant mb-1">Company Size</label>
+                 <select className="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors appearance-none">
+                   <option>1-50 Employees</option>
+                   <option>51-200 Employees</option>
+                   <option>201+ Employees</option>
+                 </select>
+               </div>
+               <button 
+                  type="submit"
+                  className="w-full bg-secondary text-on-secondary py-4 rounded-xl font-bold text-title-md hover:bg-secondary/90 transition-colors shadow-md mt-2"
+                >
+                  Submit Request
+                </button>
+             </form>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-2xl px-margin-mobile md:px-margin-desktop max-w-[1440px] mx-auto">
         <div className="bg-primary-container rounded-2xl p-xl md:p-2xl text-center relative overflow-hidden">
@@ -240,7 +311,7 @@ export default function Landing() {
       </section>
       
       <footer className="bg-surface-container-lowest dark:bg-surface-container-low border-t border-outline-variant w-full py-xl text-center">
-         <p className="font-display text-body-md text-on-surface-variant">© 2024 TrackForge Analytics. All rights reserved.</p>
+         <p className="font-display text-body-md text-on-surface-variant">© 2026 TrackForge Analytics. All rights reserved.</p>
       </footer>
     </div>
   );
