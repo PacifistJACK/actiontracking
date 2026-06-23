@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-const API_BASE = "http://localhost:4000/api";
+const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:4000/api";
 
 function getSessionId() {
   let sid = localStorage.getItem("tf_session_id");

@@ -55,26 +55,26 @@ def health():
         db_status = f"error: {str(e)}"
     return jsonify({"status": "ok", "database": db_status}), 200
 
+def keep_alive_ping():
+    time.sleep(10) # Wait for server to fully start
+    port = os.getenv("PORT", 4000)
+    # Render sets RENDER_EXTERNAL_URL automatically for web services
+    url = os.getenv("RENDER_EXTERNAL_URL", f"http://localhost:{port}")
+    ping_url = f"{url}/health"
+    
+    while True:
+        try:
+            req = urllib.request.Request(ping_url, headers={'User-Agent': 'Render-KeepAlive/1.0'})
+            with urllib.request.urlopen(req) as response:
+                print(f"🔄 Render Keep-Alive ping successful ({response.getcode()})")
+        except Exception as e:
+            print(f"⚠️ Render Keep-Alive ping failed: {e}")
+        time.sleep(600) # Ping every 10 minutes
+
+# Start the daemon thread globally so it runs under Gunicorn
+threading.Thread(target=keep_alive_ping, daemon=True).start()
+
 if __name__ == "__main__":
-    def keep_alive_ping():
-        time.sleep(10) # Wait for server to fully start
-        port = os.getenv("PORT", 4000)
-        # Render sets RENDER_EXTERNAL_URL automatically for web services
-        url = os.getenv("RENDER_EXTERNAL_URL", f"http://localhost:{port}")
-        ping_url = f"{url}/health"
-        
-        while True:
-            try:
-                req = urllib.request.Request(ping_url, headers={'User-Agent': 'Render-KeepAlive/1.0'})
-                with urllib.request.urlopen(req) as response:
-                    print(f"🔄 Render Keep-Alive ping successful ({response.getcode()})")
-            except Exception as e:
-                print(f"⚠️ Render Keep-Alive ping failed: {e}")
-            time.sleep(600) # Ping every 10 minutes
-
-    # Start the daemon thread
-    threading.Thread(target=keep_alive_ping, daemon=True).start()
-
     port = int(os.getenv("PORT", 4000))
     print(f"✅ Flask server running on http://localhost:{port}")
     app.run(debug=True, port=port, use_reloader=False)
