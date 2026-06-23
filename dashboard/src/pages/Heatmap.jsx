@@ -3,7 +3,7 @@ import { fetchHeatmap, fetchPages } from '../api'
 import styles from './Heatmap.module.css'
 
 const HEATMAP_W = 900
-const HEATMAP_H = 1200 // Increased height to allow scrolling down the page
+const HEATMAP_H = 2000 // Increased height to fit new Enterprise and Form sections
 
 function drawHeatmap(canvas, clicks) {
   const ctx = canvas.getContext('2d')
@@ -181,7 +181,7 @@ export default function Heatmap() {
                   top: 0, 
                   left: 0, 
                   width: '1440px', 
-                  height: '1920px', // Scaled version of 1200px canvas (1200 / 0.625 = 1920)
+                  height: '3200px', // Scaled version of 2000px canvas (2000 / 0.625 = 3200)
                   transform: 'scale(0.625)', 
                   transformOrigin: 'top left',
                   opacity: 0.35,
