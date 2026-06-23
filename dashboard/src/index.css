@@ -1,0 +1,292 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: var(--color-primary);
+  --color-primary-container: var(--color-primary-container);
+  --color-primary-fixed: var(--color-primary-fixed);
+  --color-primary-fixed-dim: var(--color-primary-fixed-dim);
+  --color-on-primary: var(--color-on-primary);
+  --color-on-primary-container: var(--color-on-primary-container);
+  --color-secondary: var(--color-secondary);
+  --color-secondary-container: var(--color-secondary-container);
+  --color-on-secondary: var(--color-on-secondary);
+  --color-tertiary: var(--color-tertiary);
+  --color-on-tertiary: var(--color-on-tertiary);
+  --color-error: var(--color-error);
+  --color-on-error: var(--color-on-error);
+
+  --color-background: var(--color-background);
+  --color-surface: var(--color-surface);
+  --color-surface-dim: var(--color-surface-dim);
+  --color-surface-bright: var(--color-surface-bright);
+  --color-surface-variant: var(--color-surface-variant);
+  --color-surface-container: var(--color-surface-container);
+  --color-surface-container-low: var(--color-surface-container-low);
+  --color-surface-container-high: var(--color-surface-container-high);
+  --color-surface-container-lowest: var(--color-surface-container-lowest);
+
+  --color-on-surface: var(--color-on-surface);
+  --color-on-surface-variant: var(--color-on-surface-variant);
+  --color-on-background: var(--color-on-background);
+
+  --color-outline: var(--color-outline);
+  --color-outline-variant: var(--color-outline-variant);
+  --color-inverse-surface: var(--color-inverse-surface);
+  --color-inverse-on-surface: var(--color-inverse-on-surface);
+
+  --spacing-base: 4px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 40px;
+  --spacing-2xl: 64px;
+  --spacing-margin-mobile: 16px;
+  --spacing-margin-desktop: 32px;
+  --spacing-gutter: 24px;
+
+  --font-display: 'Geist', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --text-display: 48px;
+  --text-display--line-height: 56px;
+  --text-display--letter-spacing: -0.02em;
+  --text-display--font-weight: 700;
+
+  --text-headline-lg: 32px;
+  --text-headline-lg--line-height: 40px;
+  --text-headline-lg--letter-spacing: -0.02em;
+  --text-headline-lg--font-weight: 600;
+
+  --text-headline-md: 24px;
+  --text-headline-md--line-height: 32px;
+  --text-headline-md--letter-spacing: -0.01em;
+  --text-headline-md--font-weight: 600;
+
+  --text-title-md: 18px;
+  --text-title-md--line-height: 28px;
+  --text-title-md--font-weight: 600;
+
+  --text-body-lg: 16px;
+  --text-body-lg--line-height: 24px;
+  --text-body-lg--font-weight: 400;
+
+  --text-body-md: 14px;
+  --text-body-md--line-height: 20px;
+  --text-body-md--font-weight: 400;
+
+  --text-label-md: 12px;
+  --text-label-md--line-height: 16px;
+  --text-label-md--letter-spacing: 0.02em;
+  --text-label-md--font-weight: 500;
+}
+
+/* Mirrors the landing.html Tailwind tokens as CSS custom properties */
+
+:root {
+  --color-primary:              #4f46e5;
+  --color-primary-container:    #4f46e5;
+  --color-primary-fixed:        #e2dfff;
+  --color-primary-fixed-dim:    #c3c0ff;
+  --color-on-primary:           #ffffff;
+  --color-on-primary-container: #dad7ff;
+  --color-secondary:            #0058be;
+  --color-secondary-container:  #2170e4;
+  --color-on-secondary:         #ffffff;
+  --color-tertiary:             #00505f;
+  --color-on-tertiary:          #ffffff;
+  --color-error:                #ba1a1a;
+  --color-on-error:             #ffffff;
+
+  --color-background:           #faf8ff;
+  --color-surface:              #faf8ff;
+  --color-surface-dim:          #d2d9f4;
+  --color-surface-bright:       #faf8ff;
+  --color-surface-variant:      #dae2fd;
+  --color-surface-container:    #eaedff;
+  --color-surface-container-low:#f2f3ff;
+  --color-surface-container-high:#e2e7ff;
+  --color-surface-container-lowest:#ffffff;
+
+  --color-on-surface:           #131b2e;
+  --color-on-surface-variant:   #464555;
+  --color-on-background:        #131b2e;
+
+  --color-outline:              #777587;
+  --color-outline-variant:      #c7c4d8;
+  --color-inverse-surface:      #283044;
+  --color-inverse-on-surface:   #eef0ff;
+
+  --radius-sm:   0.25rem;
+  --radius-md:   0.5rem;
+  --radius-lg:   0.75rem;
+  --radius-full: 9999px;
+
+  --font-display: 'Geist', system-ui, sans-serif;
+}
+
+/* ─── Dark Mode ─────────────────────────────────────────────────────────────── */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-primary:              #9b8ef5;
+    --color-primary-container:    #3730a3;
+    --color-primary-fixed:        #2a2566;
+    --color-primary-fixed-dim:    #3730a3;
+    --color-on-primary:           #ffffff;
+    --color-on-primary-container: #dad7ff;
+    --color-secondary:            #6eaaff;
+    --color-secondary-container:  #0b469e;
+    --color-on-secondary:         #ffffff;
+    --color-tertiary:             #4dd8e8;
+    --color-on-tertiary:          #003840;
+    --color-error:                #ffb4ab;
+    --color-on-error:             #690005;
+
+    --color-background:           #0f1626;
+    --color-surface:              #131b2e;
+    --color-surface-dim:          #0f1626;
+    --color-surface-bright:       #1e2a42;
+    --color-surface-variant:      #1c2540;
+    --color-surface-container:    #1a2236;
+    --color-surface-container-low:#131b2e;
+    --color-surface-container-high:#22304d;
+    --color-surface-container-lowest:#0b1220;
+
+    --color-on-surface:           #e0e4f4;
+    --color-on-surface-variant:   #a8adc8;
+    --color-on-background:        #e0e4f4;
+
+    --color-outline:              #5a5f7a;
+    --color-outline-variant:      #2d3555;
+    --color-inverse-surface:      #e0e4f4;
+    --color-inverse-on-surface:   #131b2e;
+  }
+}
+
+/* Apply dark vars directly via data-theme for JS toggle */
+[data-theme="dark"] {
+  --color-primary:              #9b8ef5;
+  --color-primary-container:    #3730a3;
+  --color-primary-fixed:        #2a2566;
+  --color-on-primary:           #ffffff;
+  --color-on-primary-container: #dad7ff;
+  --color-secondary:            #6eaaff;
+  --color-secondary-container:  #0b469e;
+  --color-on-secondary:         #ffffff;
+  --color-tertiary:             #4dd8e8;
+  --color-on-tertiary:          #003840;
+  --color-error:                #ffb4ab;
+  --color-on-error:             #690005;
+
+  --color-background:           #0f1626;
+  --color-surface:              #131b2e;
+  --color-surface-dim:          #0f1626;
+  --color-surface-bright:       #1e2a42;
+  --color-surface-variant:      #1c2540;
+  --color-surface-container:    #1a2236;
+  --color-surface-container-low:#131b2e;
+  --color-surface-container-high:#22304d;
+  --color-surface-container-lowest:#0b1220;
+
+  --color-on-surface:           #e0e4f4;
+  --color-on-surface-variant:   #a8adc8;
+  --color-on-background:        #e0e4f4;
+
+  --color-outline:              #5a5f7a;
+  --color-outline-variant:      #2d3555;
+  --color-inverse-surface:      #e0e4f4;
+  --color-inverse-on-surface:   #131b2e;
+}
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-display);
+  background-color: var(--color-background);
+  color: var(--color-on-background);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ─── Utility Classes ──────────────────────────────────────────────────────── */
+@layer components {
+  .glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--color-outline-variant);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  transition: background 0.3s, border-color 0.3s;
+}
+
+[data-theme="dark"] .glass-card {
+  background: rgba(19, 27, 46, 0.85);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  background: linear-gradient(180deg, #4f46e5 0%, #3730a3 100%);
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: opacity 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 2px 6px rgba(79,70,229,0.3);
+}
+.btn-primary:hover { opacity: 0.9; }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+  font-weight: 500;
+  font-size: 14px;
+  border: 1px solid var(--color-outline-variant);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-secondary:hover { background: var(--color-surface-variant); }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.badge-page-view { background: rgba(79,70,229,0.12); color: var(--color-primary); }
+.badge-click     { background: rgba(0,88,190,0.12);  color: var(--color-secondary); }
+
+/* ─── Scrollbar ────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-outline-variant); border-radius: 99px; }
+
+/* ─── Animations ───────────────────────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+.animate-fade-in-up { animation: fadeInUp 0.35s ease both; }
+.animate-pulse-dot  { animation: pulse-dot 1.5s ease-in-out infinite; }
+}
