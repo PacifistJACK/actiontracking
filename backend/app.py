@@ -42,7 +42,11 @@ app.register_blueprint(events_bp, url_prefix="/api")
 # ─── Root ─────────────────────────────────────────────────────────────────────
 @app.route("/")
 def index():
-    return jsonify({"status": "TrackForge Analytics API running", "version": "1.0.0"})
+    return jsonify({
+        "status": "TrackForge Analytics API running", 
+        "version": "1.0.0",
+        "dashboard": "https://trackforge-dashboard.onrender.com/"
+    })
 
 # ─── Health Check ─────────────────────────────────────────────────────────────
 @app.route("/health")
