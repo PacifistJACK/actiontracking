@@ -43,8 +43,16 @@ export function useTracker() {
 
   useEffect(() => {
     if (isInIframe) return;
-    // Track clicks globally
+    // Track clicks globally — but skip internal dashboard routes
+    // (clicks on /sessions, /heatmap, etc. pollute the heatmap page selector)
+    const DASHBOARD_PATHS = ['/sessions', '/heatmap']
+    const isDashboardRoute = () => {
+      const path = window.location.pathname.replace(/\/$/, '')
+      return DASHBOARD_PATHS.some(p => path === p || path.startsWith(p + '/'))
+    }
+
     const trackClick = (e) => {
+      if (isDashboardRoute()) return; // skip dashboard clicks
       sendEvent({
         session_id: SESSION_ID,
         event_type: "click",
@@ -63,6 +71,7 @@ export function useTracker() {
       document.removeEventListener("click", trackClick);
     };
   }, []);
+
 
   useEffect(() => {
     if (isInIframe) return;

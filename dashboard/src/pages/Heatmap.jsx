@@ -64,11 +64,25 @@ export default function Heatmap() {
   const [hasFetched, setHasFetched] = useState(false) // true once a heatmap fetch completes
   const canvasRef = useRef(null)
 
-  // Load available pages
+  // Load available pages — filter out internal dashboard routes
   useEffect(() => {
+    const DASHBOARD_PATHS = ['/sessions', '/heatmap']
+    const isDashboardRoute = (url) => {
+      try {
+        const path = new URL(url).pathname.replace(/\/$/, '')
+        return DASHBOARD_PATHS.some(p => path === p || path.startsWith(p + '/'))
+      } catch {
+        return false
+      }
+    }
     fetchPages()
-      .then(p => { setPages(p); if (p.length > 0) setSelPage(p[0]) })
-      .catch(() => {})
+      .then(p => {
+        const filtered = p.filter(url => !isDashboardRoute(url))
+        setPages(filtered)
+        if (filtered.length > 0) setSelPage(filtered[0])
+        else setLoading(false) // no pages, stop spinner
+      })
+      .catch(() => setLoading(false))
       .finally(() => setPagesLoading(false))
   }, [])
 

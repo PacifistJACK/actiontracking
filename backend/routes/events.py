@@ -162,10 +162,30 @@ def get_heatmap():
 # ─── GET /api/pages ─────────────────────────────────────────────────────────
 @events_bp.route("/pages", methods=["GET"])
 def get_pages():
-    """Return list of distinct page URLs that have click events (for heatmap page selector)."""
+    """Return list of distinct page URLs that have click events (for heatmap page selector).
+    Excludes internal dashboard routes (/sessions, /heatmap, etc.) which are tracked
+    by the analytics script but are not meaningful heatmap targets.
+    """
     db = get_db()
     pages = db.events.distinct("page_url", {"event_type": "click"})
-    return jsonify(sorted(pages)), 200
+
+    # Dashboard-internal path segments to exclude from heatmap target list.
+    DASHBOARD_PATHS = ("/sessions", "/heatmap")
+
+    def is_dashboard_route(url):
+        try:
+            from urllib.parse import urlparse
+            path = urlparse(url).path.rstrip("/")
+            # Exclude exact matches and sub-paths like /sessions/tf_abc123
+            return any(
+                path == p or path.startswith(p + "/")
+                for p in DASHBOARD_PATHS
+            )
+        except Exception:
+            return False
+
+    filtered = [p for p in pages if not is_dashboard_route(p)]
+    return jsonify(sorted(filtered)), 200
 
 
 # ─── GET /api/stats ──────────────────────────────────────────────────────────
