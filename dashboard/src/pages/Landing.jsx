@@ -81,10 +81,10 @@ export default function Landing() {
               <p className="font-display text-body-lg text-on-surface-variant max-w-[36rem] mb-4">
                 <strong>Step 2:</strong> Once you've clicked around, open the dashboard to see your session and heatmaps!
               </p>
-              <Link to="/sessions" className="btn-primary text-on-primary font-display text-title-md px-8 py-4 rounded-lg hover:opacity-90 transition-opacity shadow-lg flex items-center gap-2 w-fit relative overflow-hidden group">
+              <Link to="/sessions" className="btn-primary text-white font-display text-title-md px-8 py-4 rounded-lg shadow-lg flex items-center gap-2 w-fit relative overflow-hidden group">
                 <span className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
-                <span className="material-symbols-outlined text-2xl relative z-10">dashboard</span> 
-                <span className="relative z-10 font-bold">Go To Dashboard</span>
+                <span className="material-symbols-outlined text-2xl relative z-10 text-white">dashboard</span> 
+                <span className="relative z-10 font-bold text-white">Go To Dashboard</span>
               </Link>
             </div>
           </div>
@@ -277,9 +277,9 @@ export default function Landing() {
                    <option>201+ Employees</option>
                  </select>
                </div>
-               <button 
+                <button 
                   type="submit"
-                  className="w-full bg-secondary text-on-secondary py-4 rounded-xl font-bold text-title-md hover:bg-secondary/90 transition-colors shadow-md mt-2"
+                  className="btn-primary w-full justify-center py-4 rounded-xl text-title-md mt-4"
                 >
                   Submit Request
                 </button>
@@ -298,8 +298,9 @@ export default function Landing() {
               Experience user tracking, session analytics, journey visualization, and heatmap analysis in a complete behavioral analytics workflow.
             </p>
             <div className="flex flex-wrap justify-center gap-md">
-              <Link to="/sessions" className="bg-surface text-primary font-display text-title-md px-8 py-3 rounded-lg hover:bg-surface-variant transition-colors shadow-lg">
-                Open Dashboard
+              <Link to="/sessions" className="btn-primary px-8 py-4 rounded-xl font-bold text-title-md shadow-xl flex items-center gap-2 mt-4 hover:shadow-2xl transition-all hover:-translate-y-1">
+                <span className="material-symbols-outlined text-white text-xl">open_in_new</span>
+                <span className="text-white">Open Dashboard</span>
               </Link>
             </div>
           </div>
