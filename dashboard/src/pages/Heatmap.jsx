@@ -4,15 +4,13 @@ import styles from './Heatmap.module.css'
 
 const HEATMAP_W = 900
 const HEATMAP_H = 2000 // Increased height to fit new Enterprise and Form sections
+const IFRAME_SCALE = HEATMAP_W / 1440 // 0.625 — scale 1440px layout down to 900px canvas
 
 function drawHeatmap(canvas, clicks) {
   const ctx = canvas.getContext('2d')
   ctx.clearRect(0, 0, canvas.width, canvas.height)
 
   if (clicks.length === 0) return
-
-  // Transparent background so the iframe shows through!
-  ctx.clearRect(0, 0, canvas.width, canvas.height)
 
   // Draw each click as a radial gradient blob
   clicks.forEach(({ x, y, viewport_width = 1440, viewport_height = 900 }) => {
@@ -62,6 +60,7 @@ export default function Heatmap() {
   const [clicks, setClicks]   = useState([])
   const [loading, setLoading] = useState(false)
   const [pagesLoading, setPagesLoading] = useState(true)
+  const [iframeStatus, setIframeStatus] = useState('loading') // 'loading' | 'loaded' | 'error'
   const canvasRef = useRef(null)
 
   // Load available pages
@@ -76,6 +75,7 @@ export default function Heatmap() {
   useEffect(() => {
     if (!selPage) return
     setLoading(true)
+    setIframeStatus('loading')
     fetchHeatmap(selPage)
       .then(data => {
         setClicks(data)
@@ -98,8 +98,23 @@ export default function Heatmap() {
     return () => window.removeEventListener('resize', redraw)
   }, [redraw])
 
+  // Build same-origin iframe URL from the stored page_url.
+  // The DB stores full URLs like "http://deployed-site.com/" or "http://localhost:5173/".
+  // We extract just the pathname so the iframe always loads from the current origin,
+  // avoiding cross-origin blocking and ensuring the faded preview actually renders.
+  const iframeSrc = (() => {
+    if (!selPage) return ''
+    try {
+      const url = new URL(selPage)
+      return url.pathname + url.search + url.hash
+    } catch {
+      // If it's already a relative path, use as-is
+      return selPage
+    }
+  })()
+
   return (
-    <div className={styles.page}>
+    <div className={`${styles.page} page-enter`}>
       {/* Header */}
       <div className={styles.header}>
         <div>
@@ -172,34 +187,67 @@ export default function Heatmap() {
             <p style={{ fontSize: 13 }}>Open <strong>{selPage}</strong> and start clicking!</p>
           </div>
         ) : (
-          <div style={{ position: 'relative', width: HEATMAP_W, height: '600px', overflowY: 'auto', overflowX: 'hidden', borderRadius: '12px', border: '1px solid var(--color-outline-variant)' }} className="mx-auto mt-4 custom-scrollbar">
-            {selPage && (
-              <iframe 
-                src={selPage} 
+          <div
+            className={`${styles.heatmapScroller} custom-scrollbar`}
+            style={{ width: HEATMAP_W, maxWidth: '100%', position: 'relative' }}
+          >
+            {/* Click count badge */}
+            <div className={styles.clickCountBadge}>
+              <span className="material-symbols-outlined" style={{ fontSize: 14 }}>ads_click</span>
+              {clicks.length} clicks rendered
+            </div>
+            {/* Iframe error fallback */}
+            {iframeStatus === 'error' && (
+              <div className={styles.iframeFallback}>
+                <span className="material-symbols-outlined" style={{ fontSize: 16 }}>image_not_supported</span>
+                Page preview unavailable
+              </div>
+            )}
+            {/* Spacer div — establishes the scrollable height (canvas natural height) */}
+            <div style={{ width: HEATMAP_W, height: HEATMAP_H, position: 'relative' }}>
+              {/* Faded landing page background (iframe) */}
+              {selPage && (
+                <iframe 
+                  key={selPage}
+                  src={iframeSrc}
+                  sandbox="allow-same-origin allow-scripts"
+                  loading="lazy"
+                  onLoad={() => setIframeStatus('loaded')}
+                  onError={() => setIframeStatus('error')}
+                  style={{ 
+                    position: 'absolute', 
+                    top: 0, 
+                    left: 0, 
+                    width: '1440px', 
+                    height: `${Math.ceil(HEATMAP_H / IFRAME_SCALE)}px`,
+                    transform: `scale(${IFRAME_SCALE})`, 
+                    transformOrigin: 'top left',
+                    opacity: iframeStatus === 'loaded' ? 0.4 : 0,
+                    filter: 'grayscale(50%)',
+                    pointerEvents: 'none',
+                    zIndex: 0,
+                    border: 'none',
+                    transition: 'opacity 0.5s ease'
+                  }} 
+                  title="Heatmap Background"
+                />
+              )}
+              {/* Heatmap canvas overlay */}
+              <canvas
+                ref={canvasRef}
+                width={HEATMAP_W}
+                height={HEATMAP_H}
+                className={styles.canvas}
                 style={{ 
                   position: 'absolute', 
                   top: 0, 
                   left: 0, 
-                  width: '1440px', 
-                  height: '3200px', // Scaled version of 2000px canvas (2000 / 0.625 = 3200)
-                  transform: 'scale(0.625)', 
-                  transformOrigin: 'top left',
-                  opacity: 0.35,
-                  filter: 'grayscale(60%)',
-                  pointerEvents: 'none',
-                  zIndex: 0,
-                  border: 'none'
-                }} 
-                title="Heatmap Background"
+                  zIndex: 10, 
+                  background: 'transparent', 
+                  display: 'block' 
+                }}
               />
-            )}
-            <canvas
-              ref={canvasRef}
-              width={HEATMAP_W}
-              height={HEATMAP_H}
-              className={styles.canvas}
-              style={{ position: 'relative', zIndex: 10, background: 'transparent', display: 'block' }}
-            />
+            </div>
           </div>
         )}
       </div>
@@ -238,3 +286,4 @@ export default function Heatmap() {
     </div>
   )
 }
+

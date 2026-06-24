@@ -1,6 +1,6 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { fetchSessions, clearData } from '../api'
+import { fetchSessions, fetchStats, clearData } from '../api'
 import styles from './Sessions.module.css'
 
 function formatDate(iso) {
@@ -8,6 +8,21 @@ function formatDate(iso) {
   return new Date(iso).toLocaleString('en-IN', {
     dateStyle: 'medium', timeStyle: 'short'
   })
+}
+
+function formatDuration(firstSeen, lastSeen) {
+  if (!firstSeen || !lastSeen) return '—'
+  const ms = new Date(lastSeen) - new Date(firstSeen)
+  if (ms < 0 || isNaN(ms)) return '—'
+  if (ms < 1000) return '< 1s'
+  const seconds = Math.floor(ms / 1000)
+  if (seconds < 60) return `${seconds}s`
+  const minutes = Math.floor(seconds / 60)
+  const secs = seconds % 60
+  if (minutes < 60) return `${minutes}m ${secs}s`
+  const hours = Math.floor(minutes / 60)
+  const mins = minutes % 60
+  return `${hours}h ${mins}m`
 }
 
 function getDeviceInfo(ua) {
@@ -31,6 +46,36 @@ function getDeviceInfo(ua) {
   return { os, browser, icon }
 }
 
+/* ─── Animated Counter ─────────────────────────────────────────────────────── */
+function AnimatedNumber({ value, duration = 800 }) {
+  const [display, setDisplay] = useState(0)
+  const prevRef = useRef(0)
+
+  useEffect(() => {
+    const start = prevRef.current
+    const end = typeof value === 'number' ? value : 0
+    if (start === end) { setDisplay(end); return }
+
+    const startTime = performance.now()
+    let raf
+    function tick(now) {
+      const progress = Math.min((now - startTime) / duration, 1)
+      // ease-out cubic
+      const eased = 1 - Math.pow(1 - progress, 3)
+      setDisplay(Math.round(start + (end - start) * eased))
+      if (progress < 1) {
+        raf = requestAnimationFrame(tick)
+      } else {
+        prevRef.current = end
+      }
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [value, duration])
+
+  return <span className="animate-count-up">{display.toLocaleString()}</span>
+}
+
 function StatCard({ icon, label, value, accent }) {
   return (
     <div className={styles.statCard} style={{ '--accent': accent }}>
@@ -39,7 +84,9 @@ function StatCard({ icon, label, value, accent }) {
       </div>
       <div>
         <p className={styles.statLabel}>{label}</p>
-        <p className={styles.statValue}>{value}</p>
+        <p className={styles.statValue}>
+          <AnimatedNumber value={value} />
+        </p>
       </div>
     </div>
   )
@@ -55,7 +102,14 @@ export default function Sessions() {
   const [loading, setLoading]       = useState(true)
   const [error, setError]           = useState(null)
   const [search, setSearch]         = useState('')
+  const [stats, setStats]           = useState(null)
   const navigate = useNavigate()
+
+  const loadStats = useCallback(() => {
+    fetchStats()
+      .then(setStats)
+      .catch(() => {}) // stats are optional, don't block on failure
+  }, [])
 
   const load = useCallback((p = page) => {
     setLoading(true)
@@ -79,7 +133,10 @@ export default function Sessions() {
       .finally(() => setLoading(false))
   }, [page])
 
-  useEffect(() => { load(1) }, []) // eslint-disable-line
+  useEffect(() => {
+    load(1)
+    loadStats()
+  }, []) // eslint-disable-line
 
   const handleClear = () => {
     if (window.confirm("Are you sure you want to completely WIPE all tracking data? This cannot be undone.")) {
@@ -88,6 +145,7 @@ export default function Sessions() {
         .then(() => {
           setPage(1)
           load(1)
+          loadStats()
         })
         .catch(e => {
           setError(e.message)
@@ -100,8 +158,6 @@ export default function Sessions() {
     s.session_id.toLowerCase().includes(search.toLowerCase())
   )
 
-  const totalEvents = sessions.reduce((a, s) => a + (s.event_count || 0), 0)
-
   function goPage(p) {
     if (p < 1 || p > totalPages) return
     setPage(p)
@@ -110,7 +166,7 @@ export default function Sessions() {
   }
 
   return (
-    <div className={styles.page}>
+    <div className={`${styles.page} page-enter`}>
       {/* Header */}
       <div className={styles.header}>
         <div>
@@ -125,18 +181,45 @@ export default function Sessions() {
             <span className="material-symbols-outlined" style={{ fontSize: 18 }}>delete</span>
             Clear Data
           </button>
-          <button className="btn-primary" onClick={() => load(page)} title="Refresh" id="refresh-sessions-btn">
+          <button className="btn-primary" onClick={() => { load(page); loadStats() }} title="Refresh" id="refresh-sessions-btn">
             <span className="material-symbols-outlined" style={{ fontSize: 18 }}>refresh</span>
             Refresh
           </button>
         </div>
       </div>
 
-      {/* Stat Cards */}
+      {/* Global Stat Cards */}
       <div className={styles.stats}>
-        <StatCard icon="group"    label="Total Sessions"  value={total}                                                accent="var(--color-primary)" />
-        <StatCard icon="bolt"     label="Events This Page" value={totalEvents}                                         accent="var(--color-secondary)" />
-        <StatCard icon="language" label="Unique Pages"    value={[...new Set(sessions.flatMap(s => s.page_urls || []))].length} accent="var(--color-tertiary)" />
+        <StatCard
+          icon="group"
+          label="Total Sessions"
+          value={stats?.total_sessions ?? total}
+          accent="var(--color-primary)"
+        />
+        <StatCard
+          icon="bolt"
+          label="Total Events"
+          value={stats?.total_events ?? 0}
+          accent="var(--color-secondary)"
+        />
+        <StatCard
+          icon="ads_click"
+          label="Total Clicks"
+          value={stats?.total_clicks ?? 0}
+          accent="var(--color-tertiary)"
+        />
+        <StatCard
+          icon="pageview"
+          label="Page Views"
+          value={stats?.total_page_views ?? 0}
+          accent="var(--color-error)"
+        />
+        <StatCard
+          icon="language"
+          label="Unique Pages"
+          value={stats?.total_pages ?? 0}
+          accent="#16a34a"
+        />
       </div>
 
       {/* Search */}
@@ -182,11 +265,22 @@ export default function Sessions() {
         </div>
       ) : filtered.length === 0 ? (
         <div className={styles.empty}>
-          <span className="material-symbols-outlined" style={{ fontSize: 48 }}>inbox</span>
-          <p>{sessions.length === 0
-            ? 'No sessions yet. Open landing.html and interact!'
-            : 'No sessions match your filter.'
-          }</p>
+          <span className="material-symbols-outlined" style={{ fontSize: 56, opacity: 0.5 }}>inbox</span>
+          <p style={{ fontWeight: 600, fontSize: 16 }}>
+            {sessions.length === 0 ? 'No sessions yet' : 'No sessions match your filter'}
+          </p>
+          <p style={{ fontSize: 13, opacity: 0.7, maxWidth: 320 }}>
+            {sessions.length === 0
+              ? 'Go to the landing page and click around to generate tracking data!'
+              : 'Try a different search term.'
+            }
+          </p>
+          {sessions.length === 0 && (
+            <button className="btn-primary" onClick={() => navigate('/')} style={{ marginTop: 8 }}>
+              <span className="material-symbols-outlined" style={{ fontSize: 18 }}>arrow_forward</span>
+              Go to Landing Page
+            </button>
+          )}
         </div>
       ) : (
         <>
@@ -196,6 +290,7 @@ export default function Sessions() {
                 <tr>
                   <th>Session ID</th>
                   <th>Events</th>
+                  <th>Duration</th>
                   <th>First Seen</th>
                   <th>Last Seen</th>
                   <th>Pages</th>
@@ -220,6 +315,12 @@ export default function Sessions() {
                     </td>
                     <td>
                       <span className={styles.eventBadge}>{s.event_count}</span>
+                    </td>
+                    <td>
+                      <span className={styles.duration}>
+                        <span className="material-symbols-outlined" style={{ fontSize: 14 }}>timer</span>
+                        {formatDuration(s.first_seen, s.last_seen)}
+                      </span>
                     </td>
                     <td className={styles.muted}>{formatDate(s.first_seen)}</td>
                     <td className={styles.muted}>{formatDate(s.last_seen)}</td>
@@ -306,6 +407,7 @@ export default function Sessions() {
             <ul className="space-y-2 text-body-md text-on-surface-variant">
               <li><strong>Session ID:</strong> A unique, anonymous identifier given to a user's browser for this visit.</li>
               <li><strong>Events:</strong> The total number of tracking events (both page views and mouse clicks) recorded during the session.</li>
+              <li><strong>Duration:</strong> The elapsed time between the session's first and last recorded activity.</li>
               <li><strong>First Seen / Last Seen:</strong> The timestamps marking the beginning and the most recent activity of the session.</li>
               <li><strong>Pages:</strong> The total number of unique URLs the user visited during this session.</li>
             </ul>

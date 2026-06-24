@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import styles from './Navbar.module.css'
 
@@ -16,8 +16,8 @@ export default function Navbar() {
   return (
     <nav className={styles.nav}>
       <div className={styles.inner}>
-        {/* Logo */}
-        <a href="/sessions" className={styles.brand} id="navbar-brand">
+        {/* Logo — links to landing page */}
+        <Link to="/" className={styles.brand} id="navbar-brand">
           <div className={styles.logoIcon}>
             <span className="material-symbols-outlined" style={{ fontSize: 20, color: '#fff' }}>
               analytics
@@ -25,10 +25,21 @@ export default function Navbar() {
           </div>
           <span className={styles.brandName}>TrackForge</span>
           <span className={styles.brandSub}>Analytics</span>
-        </a>
+        </Link>
 
         {/* Nav Links */}
         <div className={styles.links}>
+          <NavLink
+            to="/"
+            end
+            id="nav-home"
+            className={({ isActive }) =>
+              `${styles.link} ${isActive ? styles.linkActive : ''}`
+            }
+          >
+            <span className="material-symbols-outlined" style={{ fontSize: 18 }}>home</span>
+            Home
+          </NavLink>
           <NavLink
             to="/sessions"
             id="nav-sessions"

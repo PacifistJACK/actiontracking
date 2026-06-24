@@ -26,7 +26,7 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 40px;
+  margin-bottom: 28px;
   flex-wrap: wrap;
 }
 
@@ -80,7 +80,41 @@
   color: var(--color-tertiary);
 }
 
-/* Timeline */
+/* ─── Summary Card ─────────────────────────────────────────────────────────── */
+.summaryCard {
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 20px;
+}
+
+.summaryItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.summaryLabel {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-on-surface-variant);
+  margin-bottom: 2px;
+}
+
+.summaryValue {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-on-surface);
+}
+
+/* ─── Timeline ─────────────────────────────────────────────────────────────── */
 .timeline { padding: 0; }
 
 .eventRow {
@@ -118,6 +152,26 @@
   background: rgba(0,88,190,0.12);
   color: var(--color-secondary);
   border: 2px solid var(--color-secondary);
+}
+
+.dotScroll {
+  background: rgba(139, 92, 246, 0.12);
+  color: #8b5cf6;
+  border: 2px solid #8b5cf6;
+}
+
+.badgeScroll {
+  background: rgba(139, 92, 246, 0.1);
+  color: #8b5cf6;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
 }
 
 .line {
@@ -168,6 +222,16 @@
 }
 
 .viewport { opacity: 0.6; }
+
+/* ─── Scroll depth ─────────────────────────────────────────────────────────── */
+.scrollDepthWrap {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: var(--color-surface-container-low);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  color: var(--color-on-surface-variant);
+}
 
 /* End marker */
 .endMarker {

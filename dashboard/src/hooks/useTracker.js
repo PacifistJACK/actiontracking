@@ -26,7 +26,11 @@ function sendEvent(payload) {
 export function useTracker() {
   const location = useLocation();
 
+  // Don't track events when running inside an iframe (e.g., heatmap background preview)
+  const isInIframe = typeof window !== 'undefined' && window.self !== window.top;
+
   useEffect(() => {
+    if (isInIframe) return;
     // Track page view on route change
     sendEvent({
       session_id: SESSION_ID,
@@ -38,6 +42,7 @@ export function useTracker() {
   }, [location]);
 
   useEffect(() => {
+    if (isInIframe) return;
     // Track clicks globally
     const trackClick = (e) => {
       sendEvent({
@@ -60,6 +65,7 @@ export function useTracker() {
   }, []);
 
   useEffect(() => {
+    if (isInIframe) return;
     // Track scroll depth
     const reportedDepths = new Set();
     let scrollTimeout;
