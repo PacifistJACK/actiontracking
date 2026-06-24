@@ -13,26 +13,25 @@ function drawHeatmap(canvas, clicks) {
   if (clicks.length === 0) return
 
   // Draw each click as a radial gradient blob
-  clicks.forEach(({ x, y, viewport_width = 1440, viewport_height = 900 }) => {
+  clicks.forEach(({ x, y, viewport_width = 1440 }) => {
     // To perfectly align clicks to the scaled 1440px iframe:
-    let iframe_x = x;
-    let iframe_y = y;
+    let scaled_x;
     
     if (viewport_width > 1440) {
       // The user's screen was wider than the 1440px max-width layout, so it was centered.
       // Subtract the empty margin to map X directly onto the 1440px content block.
       const margin = (viewport_width - 1440) / 2;
-      iframe_x = x - margin;
+      scaled_x = x - margin;
     } else {
       // If screen was smaller, stretch proportionally (best effort for mobile->desktop mapping)
-      iframe_x = x * (1440 / viewport_width);
+      scaled_x = x * (1440 / viewport_width);
     }
     
     // The iframe is visually scaled down by the canvas width (900 / 1440 = 0.625)
     // We apply this exact scale to both X and Y so the dots perfectly overlay the visual iframe
     const scale = canvas.width / 1440;
-    const nx = iframe_x * scale;
-    const ny = iframe_y * scale;
+    const nx = scaled_x * scale;
+    const ny = y * scale;
     const r  = 40
 
     const grad = ctx.createRadialGradient(nx, ny, 0, nx, ny, r)
@@ -89,22 +88,30 @@ export default function Heatmap() {
   // Load click data when page selection changes
   useEffect(() => {
     if (!selPage) return
+    let isSubscribed = true
     setLoading(true)
     setHasFetched(false)
     setIframeStatus('loading')
     fetchHeatmap(selPage)
       .then(data => {
-        setClicks(data)
-        // Draw after state update
-        requestAnimationFrame(() => {
-          if (canvasRef.current) drawHeatmap(canvasRef.current, data)
-        })
+        if (isSubscribed) {
+          setClicks(data)
+          // Draw after state update
+          requestAnimationFrame(() => {
+            if (canvasRef.current) drawHeatmap(canvasRef.current, data)
+          })
+        }
       })
-      .catch(() => setClicks([]))
+      .catch(() => {
+        if (isSubscribed) setClicks([])
+      })
       .finally(() => {
-        setLoading(false)
-        setHasFetched(true)
+        if (isSubscribed) {
+          setLoading(false)
+          setHasFetched(true)
+        }
       })
+      return () => { isSubscribed = false }
   }, [selPage])
 
   // Redraw on resize

@@ -160,7 +160,6 @@ export default function SessionDetail() {
 
   const clicks    = events.filter(e => e.event_type === 'click').length
   const pageViews = events.filter(e => e.event_type === 'page_view').length
-  const scrolls   = events.filter(e => e.event_type === 'scroll').length
   const maxDepth  = Math.max(0, ...events.filter(e => e.event_type === 'scroll' && e.depth).map(e => e.depth))
   const device    = getDeviceInfo(events[0]?.user_agent)
   const uniquePages = [...new Set(events.map(e => e.page_url))].length

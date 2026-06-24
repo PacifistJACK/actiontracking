@@ -59,22 +59,19 @@ export default function Landing() {
             <div className="flex flex-wrap gap-md pt-2 pb-6 border-b border-outline-variant/30">
               <button 
                 type="button"
-                className="bg-primary text-on-primary font-display text-title-md px-6 py-3 rounded-lg hover:bg-primary/90 transition-all shadow-md"
-                onClick={() => console.log('Get Started clicked')}
+                className="btn-primary"
               >
                 Get Started Free
               </button>
               <button 
                 type="button"
-                className="bg-surface text-primary border border-outline-variant font-display text-title-md px-6 py-3 rounded-lg hover:bg-surface-variant transition-all shadow-sm"
-                onClick={() => console.log('Book Demo clicked')}
+                className="btn-secondary"
               >
                 Book a Demo
               </button>
               <button 
                 type="button"
-                className="bg-secondary/10 text-secondary border border-secondary/30 font-display text-title-md px-6 py-3 rounded-lg hover:bg-secondary hover:text-white transition-all shadow-sm"
-                onClick={() => console.log('Docs clicked')}
+                className="btn-secondary border-none"
               >
                 Read the Docs
               </button>
@@ -248,8 +245,7 @@ export default function Landing() {
               <li className="flex items-center gap-3 text-on-surface"><span className="material-symbols-outlined text-primary text-sm">check_circle</span> Dedicated Account Manager</li>
             </ul>
             <button 
-              onClick={() => console.log("Pricing Clicked")}
-              className="w-full mt-auto bg-primary text-on-primary py-4 rounded-xl font-bold text-title-md hover:bg-primary/90 transition-colors shadow-md flex items-center justify-center gap-2"
+              className="btn-primary w-full justify-center"
             >
               Start Free Trial <span className="material-symbols-outlined text-sm">arrow_forward</span>
             </button>
@@ -258,7 +254,7 @@ export default function Landing() {
           {/* Contact Form Mock */}
           <div className="glass-card p-xl rounded-2xl border border-outline-variant hover:border-secondary/50 transition-colors">
              <h3 className="font-display text-title-lg text-on-background mb-6">Request a Personalized Demo</h3>
-             <form onSubmit={(e) => { e.preventDefault(); console.log("Demo Requested"); }} className="space-y-5">
+             <form onSubmit={(e) => e.preventDefault()} className="space-y-5">
                <div className="grid grid-cols-2 gap-4">
                  <div>
                    <label className="block text-label-md text-on-surface-variant mb-1">First Name</label>
