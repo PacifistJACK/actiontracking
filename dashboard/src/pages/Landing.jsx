@@ -38,8 +38,8 @@ export default function Landing() {
               <Link to="/sessions" className="text-on-surface-variant hover:text-primary font-display text-body-lg transition-colors">Dashboard</Link>
             </div>
             <ThemeToggle />
-            <button className="md:hidden text-on-surface">
-              <span className="material-symbols-outlined text-2xl">menu</span>
+            <button aria-label="Menu" className="md:hidden text-on-surface">
+              <span aria-hidden="true" className="material-symbols-outlined text-2xl">menu</span>
             </button>
           </div>
         </div>
@@ -257,21 +257,21 @@ export default function Landing() {
              <form onSubmit={(e) => e.preventDefault()} className="space-y-5">
                <div className="grid grid-cols-2 gap-4">
                  <div>
-                   <label className="block text-label-md text-on-surface-variant mb-1">First Name</label>
-                   <input type="text" placeholder="John" className="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" />
+                   <label htmlFor="first_name" className="block text-label-md text-on-surface-variant mb-1">First Name</label>
+                   <input id="first_name" type="text" placeholder="John" className="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" />
                  </div>
                  <div>
-                   <label className="block text-label-md text-on-surface-variant mb-1">Last Name</label>
-                   <input type="text" placeholder="Doe" className="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" />
+                   <label htmlFor="last_name" className="block text-label-md text-on-surface-variant mb-1">Last Name</label>
+                   <input id="last_name" type="text" placeholder="Doe" className="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" />
                  </div>
                </div>
                <div>
-                 <label className="block text-label-md text-on-surface-variant mb-1">Work Email</label>
-                 <input type="email" placeholder="john@company.com" className="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" />
+                 <label htmlFor="work_email" className="block text-label-md text-on-surface-variant mb-1">Work Email</label>
+                 <input id="work_email" type="email" placeholder="john@company.com" className="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors" />
                </div>
                <div>
-                 <label className="block text-label-md text-on-surface-variant mb-1">Company Size</label>
-                 <select className="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors appearance-none">
+                 <label htmlFor="company_size" className="block text-label-md text-on-surface-variant mb-1">Company Size</label>
+                 <select id="company_size" className="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary transition-colors appearance-none">
                    <option>1-50 Employees</option>
                    <option>51-200 Employees</option>
                    <option>201+ Employees</option>
