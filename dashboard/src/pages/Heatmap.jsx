@@ -58,9 +58,10 @@ export default function Heatmap() {
   const [pages, setPages]     = useState([])
   const [selPage, setSelPage] = useState('')
   const [clicks, setClicks]   = useState([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)  // start true to avoid empty-state flash
   const [pagesLoading, setPagesLoading] = useState(true)
   const [iframeStatus, setIframeStatus] = useState('loading') // 'loading' | 'loaded' | 'error'
+  const [hasFetched, setHasFetched] = useState(false) // true once a heatmap fetch completes
   const canvasRef = useRef(null)
 
   // Load available pages
@@ -75,6 +76,7 @@ export default function Heatmap() {
   useEffect(() => {
     if (!selPage) return
     setLoading(true)
+    setHasFetched(false)
     setIframeStatus('loading')
     fetchHeatmap(selPage)
       .then(data => {
@@ -85,7 +87,10 @@ export default function Heatmap() {
         })
       })
       .catch(() => setClicks([]))
-      .finally(() => setLoading(false))
+      .finally(() => {
+        setLoading(false)
+        setHasFetched(true)
+      })
   }, [selPage])
 
   // Redraw on resize
@@ -178,7 +183,7 @@ export default function Heatmap() {
             <div className={styles.spinner} />
             <p>Rendering heatmap…</p>
           </div>
-        ) : clicks.length === 0 && selPage ? (
+        ) : hasFetched && clicks.length === 0 && selPage ? (
           <div className={styles.canvasEmpty}>
             <span className="material-symbols-outlined" style={{ fontSize: 56, color: 'var(--color-outline)' }}>
               local_fire_department
