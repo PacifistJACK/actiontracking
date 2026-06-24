@@ -71,7 +71,7 @@ export default function Landing() {
               </button>
               <button 
                 type="button"
-                className="btn-secondary border-none"
+                className="btn-ghost"
               >
                 Read the Docs
               </button>
