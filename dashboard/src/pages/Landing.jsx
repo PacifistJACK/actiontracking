@@ -81,8 +81,8 @@ export default function Landing() {
               <p className="font-display text-body-lg text-on-surface-variant max-w-[36rem] mb-4">
                 <strong>Step 2:</strong> Once you've clicked around, open the dashboard to see your session and heatmaps!
               </p>
-              <Link to="/sessions" className="btn-primary flex items-center w-fit">
-                <span className="material-symbols-outlined text-[18px]">dashboard</span> 
+              <Link to="/sessions" className="btn-primary flex items-center w-fit text-white">
+                <span className="material-symbols-outlined text-[18px] text-white">dashboard</span> 
                 Go To Dashboard
               </Link>
             </div>
@@ -297,8 +297,8 @@ export default function Landing() {
               Experience user tracking, session analytics, journey visualization, and heatmap analysis in a complete behavioral analytics workflow.
             </p>
             <div className="flex flex-wrap justify-center gap-md">
-              <Link to="/sessions" className="btn-primary mt-4">
-                <span className="material-symbols-outlined text-[18px]">open_in_new</span>
+              <Link to="/sessions" className="btn-primary mt-4 text-white">
+                <span className="material-symbols-outlined text-[18px] text-white">open_in_new</span>
                 Open Dashboard
               </Link>
             </div>

@@ -238,7 +238,7 @@ a { color: inherit; text-decoration: none; }
   gap: 8px;
   padding: 10px 20px;
   background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary-container) 100%);
-  color: var(--color-on-primary);
+  color: #ffffff !important;
   font-weight: 500;
   font-size: 15px;
   line-height: 20px;
